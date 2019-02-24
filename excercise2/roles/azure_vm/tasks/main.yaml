@@ -1,0 +1,78 @@
+##Task to create Virtual Machine and its Dependencies
+- name: Create resource group
+  azure_rm_resourcegroup:
+    name: "{{ resourcegroup.name }}"
+    location: "{{ resourcegroup.location }}"
+
+- name: Create virtual network
+  azure_rm_virtualnetwork:
+    resource_group: "{{ resourcegroup.name }}"
+    name: "{{ vnet.name }}"
+    address_prefixes: "{{ vnet.address }}"
+
+- name: Add subnet
+  azure_rm_subnet:
+    resource_group: "{{ resourcegroup.name }}"
+    name: "{{ subnet.name }}"
+    address_prefix: "{{ subnet.address }}"
+    virtual_network: "{{ vnet.name }}"
+
+- name: Create public IP address
+  azure_rm_publicipaddress:
+    resource_group: "{{ resourcegroup.name }}"
+    allocation_method: "Static"
+    name: "{{ item.name }}publicip"
+  with_items:
+    - "{{ vm }}"
+  register: output_ip_address
+
+- name: Dump public IP for VM which will be created
+  debug:
+    msg: "The public IP is {{ output_ip_address.results }}."
+
+- name: Create Network Security Group that allows SSH
+  azure_rm_securitygroup:
+    resource_group: "{{ resourcegroup.name }}"
+    name: "{{ item.name }}nsg"
+    rules:
+      - name: "{{ item.nsg.rules.name }}"
+        protocol: "{{ item.nsg.rules.protocol }}"
+        destination_port_range: "{{ item.nsg.rules.port }}"
+        access: "{{ item.nsg.rules.access }}"
+        priority: "{{ item.nsg.rules.priority }}"
+        direction: "{{ item.nsg.rules.direction }}"
+  with_items:
+    - "{{ vm }}"
+
+- name: Create virtual network inteface card
+  azure_rm_networkinterface:
+    resource_group: "{{ resourcegroup.name }}"
+    name: "{{ item.name }}nic"
+    virtual_network: "{{ vnet.name }}"
+    subnet: "{{ subnet.name }}"
+    security_group: "{{ item.name }}nsg"
+    ip_configurations:
+      - name: "{{ item.name }}ip"
+        public_ip_allocation_method: "Static"
+        public_ip_address_name: "{{ item.name }}publicip"
+  with_items:
+    - "{{ vm }}"
+
+- name: Create VM
+  azure_rm_virtualmachine:
+    resource_group: "{{ resourcegroup.name }}"
+    name: "{{ item.name }}"
+    vm_size: "{{ item.size }}"
+    admin_username: "{{ item.username }}"
+    ssh_password_enabled: false
+    ssh_public_keys:
+      - path: /home/azureuser/.ssh/authorized_keys
+        key_data: "{{ item.publickey }}"
+    network_interfaces: "{{ item.name }}nic"
+    image:
+      offer: "{{ item.image.offer }}"
+      publisher: "{{ item.image.publisher }}"
+      sku: "{{ item.image.sku }}"
+      version: "{{ item.image.version }}"
+  with_items:
+    - "{{ vm }}"

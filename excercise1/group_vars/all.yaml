@@ -1,0 +1,49 @@
+resourcegroup:
+  name: myansibletestrg
+  location: eastus
+vnet:
+  name: myvnet
+  address: 10.0.0.0/16
+subnet:
+  name: mysubnet
+  address: 10.0.1.0/24
+
+vm:
+  - name: myVm1
+    size: Standard_DS1_v2
+    username: azureuser
+    publickey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDzF2FmqifFJTLHML8hyNov+H2/6KLaSaFPhtBriD0gQySDGaBiIMg6372qtRj8RQCx8kfZ3PAK1i6s2HzKeye4BEPqdORm2Td3ZN63E2ignfMzuXv7bUaq3Ml/ua0/SWuvZcgVpqnbvEb/9S/aWdrzYLxCb5ljxMIC9FmBP0WKRufYGbl+HvcTBh344OveBGiLrRjtoBtDG95KnXBZqCJxVdtbDw8THWs4+sYIqcQZBoBdw/05O+hkKNQyAUt+zvJsPYs+CnmzQo48a35N2nPcNOtJAn7XkfDqRjuKamo8N7SwpV+mH9y6AsRobn7gE1alJL7PNSaRIdbe9M613VJx sathepv@INDCHN-21298-MPB.local
+    os_type: Linux
+    image:
+      offer: CentOS
+      publisher: OpenLogic
+      sku: '7.5'
+      version: latest
+    nsg:
+      rules:
+        name: myRule1
+        protocol: Tcp
+        port: 22
+        access: Allow
+        priority: 100
+        direction: Inbound
+
+  - name: myVm2
+    size: Standard_DS1_v2
+    username: azureuser
+    password: azurepassword@123
+    os_type: Windows
+    winrm_enable_script: SQBuAHYAbwBrAGUALQBFAHgAcAByAGUAcwBzAGkAbwBuACAALQBDAG8AbQBtAGEAbgBkACAAKAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABTAHkAcwB0AGUAbQAuAE4AZQB0AC4AVwBlAGIAQwBsAGkAZQBuAHQAKQAuAEQAbwB3AG4AbABvAGEAZABTAHQAcgBpAG4AZwAoACcAaAB0AHQAcABzADoALwAvAHIAYQB3AC4AZwBpAHQAaAB1AGIAdQBzAGUAcgBjAG8AbgB0AGUAbgB0AC4AYwBvAG0ALwBhAG4AcwBpAGIAbABlAC8AYQBuAHMAaQBiAGwAZQAvAGQAZQB2AGUAbAAvAGUAeABhAG0AcABsAGUAcwAvAHMAYwByAGkAcAB0AHMALwBDAG8AbgBmAGkAZwB1AHIAZQBSAGUAbQBvAHQAaQBuAGcARgBvAHIAQQBuAHMAaQBiAGwAZQAuAHAAcwAxACcAKQApADsAIABFAG4AYQBiAGwAZQAtAFcAUwBNAGEAbgBDAHIAZQBkAFMAUwBQACAALQBSAG8AbABlACAAUwBlAHIAdgBlAHIAIAAtAEYAbwByAGMAZQA=
+    image:
+      offer: WindowsServer
+      publisher: MicrosoftWindowsServer
+      sku: 2016-Datacenter
+      version: latest
+    nsg:
+      rules:
+        name: myRule1
+        protocol: Tcp
+        port: 3389
+        access: Allow
+        priority: 100
+        direction: Inbound

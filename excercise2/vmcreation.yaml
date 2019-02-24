@@ -1,0 +1,6 @@
+## Playbook which will invoke azure_vm role
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  roles:
+    - azure_vm
