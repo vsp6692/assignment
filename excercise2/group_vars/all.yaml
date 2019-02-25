@@ -9,21 +9,33 @@ subnet:
   address: 10.0.1.0/24
 
 vm:
-  - name: myUbuntuvm
-    size: Standard_DS1_v2
-    username: azureuser
-    publickey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDzF2FmqifFJTLHML8hyNov+H2/6KLaSaFPhtBriD0gQySDGaBiIMg6372qtRj8RQCx8kfZ3PAK1i6s2HzKeye4BEPqdORm2Td3ZN63E2ignfMzuXv7bUaq3Ml/ua0/SWuvZcgVpqnbvEb/9S/aWdrzYLxCb5ljxMIC9FmBP0WKRufYGbl+HvcTBh344OveBGiLrRjtoBtDG95KnXBZqCJxVdtbDw8THWs4+sYIqcQZBoBdw/05O+hkKNQyAUt+zvJsPYs+CnmzQo48a35N2nPcNOtJAn7XkfDqRjuKamo8N7SwpV+mH9y6AsRobn7gE1alJL7PNSaRIdbe9M613VJx sathepv@INDCHN-21298-MPB.local
-    os_type: Linux
-    image:
-      offer: UbuntuServer 
-      publisher: Canonical 
-      sku: '16.04.0-LTS'
-      version: latest
-    nsg:
-      rules:
-        name: myRule1
+  name: myUbuntuvm
+  size: Standard_DS1_v2
+  username: azureuser
+  publickey: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDzF2FmqifFJTLHML8hyNov+H2/6KLaSaFPhtBriD0gQySDGaBiIMg6372qtRj8RQCx8kfZ3PAK1i6s2HzKeye4BEPqdORm2Td3ZN63E2ignfMzuXv7bUaq3Ml/ua0/SWuvZcgVpqnbvEb/9S/aWdrzYLxCb5ljxMIC9FmBP0WKRufYGbl+HvcTBh344OveBGiLrRjtoBtDG95KnXBZqCJxVdtbDw8THWs4+sYIqcQZBoBdw/05O+hkKNQyAUt+zvJsPYs+CnmzQo48a35N2nPcNOtJAn7XkfDqRjuKamo8N7SwpV+mH9y6AsRobn7gE1alJL7PNSaRIdbe9M613VJx sathepv@INDCHN-21298-MPB.local
+  os_type: Linux
+  image:
+    offer: UbuntuServer 
+    publisher: Canonical 
+    sku: '16.04.0-LTS'
+    version: latest
+  nsg: 
+    rules:
+      - name: myRule1
         protocol: Tcp
         port: 22
         access: Allow
         priority: 100
+        direction: Inbound
+      - name: myRule2
+        protocol: Tcp
+        port: 9200
+        access: Allow
+        priority: 101
+        direction: Inbound
+      - name: myRule3
+        protocol: Tcp
+        port: 9300
+        access: Allow
+        priority: 102
         direction: Inbound
