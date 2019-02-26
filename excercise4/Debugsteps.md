@@ -1,6 +1,6 @@
 # IIS Debug Steps
 
-1. Checked the http://localhost whether its reachable and got response "503 service available"
+1. Checked the http://localhost whether its reachable and got response "503 service unavailable"
 
 2. Restarted IIS service and then rebooted the machine. Both steps didnt work out.
 

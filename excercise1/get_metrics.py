@@ -46,8 +46,8 @@ for vmname in resource_dict["vm"]:
     network_out = requests.get(network_out_url, headers=headers)
     disk_read = requests.get(disk_read_url, headers=headers)
     disk_write = requests.get(disk_write_url, headers=headers)
-    cpu_usage=str(cpu_request.json()["value"][0]["timeseries"][0]["data"][0]["average"]) + "%"
-    disk_usage=str(disk_read.json()["value"][0]["timeseries"][0]["data"][0]["total"] + disk_write.json()["value"][0]["timeseries"][0]["data"][0]["total"]) + " Bytes" 
-    network_usage=str(network_in.json()["value"][0]["timeseries"][0]["data"][0]["total"] + network_out.json()["value"][0]["timeseries"][0]["data"][0]["total"]) + " Bytes"
+    cpu_usage=str(cpu_request.json()["value"][0]["timeseries"][0]["data"][-1]["average"]) + "%"
+    disk_usage=str(disk_read.json()["value"][0]["timeseries"][0]["data"][-1]["total"] + disk_write.json()["value"][0]["timeseries"][0]["data"][-1]["total"]) + " Bytes" 
+    network_usage=str(network_in.json()["value"][0]["timeseries"][0]["data"][-1]["total"] + network_out.json()["value"][0]["timeseries"][0]["data"][-1]["total"]) + " Bytes"
     print (vmname["name"] + "  |  " + cpu_usage + "  |  " + disk_usage + "  |  " + network_usage )
 print ("------------------------------------------------------------")

@@ -26,10 +26,6 @@
     - "{{ vm }}"
   register: output_ip_address
 
-- name: Dump public IP for VM which will be created
-  debug:
-    msg: "The public IP is {{ output_ip_address.results }}."
-
 - name: Create Network Security Group that allows SSH
   azure_rm_securitygroup:
     resource_group: "{{ resourcegroup.name }}"
@@ -110,3 +106,9 @@
   when: item.os_type == "Windows"
   with_items:
     - "{{ vm }}"
+
+- name: Wait 300 seconds for elasticsearch to start in 9200 port
+  wait_for:
+    port: 9200
+    host: "{{ output_ip_address.state.ip_address }}"
+    delay: 60

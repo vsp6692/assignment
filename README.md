@@ -5,7 +5,7 @@ Create an environment with 2 machines. The machines need to be able to communica
 Create a script which outputs basic metrics of the machines.
 
 1. CPU usage
-2.  Network usage
+2. Network usage
 3. Disk usage
 
 ### Please deliver:
