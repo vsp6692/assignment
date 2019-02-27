@@ -15,7 +15,7 @@ if os.path.isfile("./publicip.txt"):
        request_output=requests.get(url, timeout=1)
        eshealth=request_output.json()
        print ("Cluster health of name " + eshealth["cluster_name"] + " is " + eshealth["status"].upper())
-    
+    #Throw exception is url not found
     except:
        print ("Cluster with IP " + ip + " is not running")
 else:
