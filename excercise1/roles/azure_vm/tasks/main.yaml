@@ -54,7 +54,7 @@
   with_items:
     - "{{ vm }}"
 
-- name: Create VM
+- name: Create Linux VM
   azure_rm_virtualmachine:
     resource_group: "{{ resourcegroup.name }}"
     name: "{{ item.name }}"
@@ -74,7 +74,15 @@
   with_items:
     - "{{ vm }}"
 
-- name: provision new Azure virtual host
+- name: Check for 22 Port to be up for Linux VM
+  wait_for:
+    port: 22
+    host: "{{ item.state.ip_address }}"
+    delay: 15
+  when: item.item.os_type == "Linux"
+  with_items: "{{ output_ip_address.results }}"
+
+- name: Create Windows VM
   azure_rm_virtualmachine:
     resource_group: "{{ resourcegroup.name }}"
     name: "{{ item.name }}"
@@ -93,7 +101,7 @@
   with_items:
     - "{{ vm }}"
 
-- name: create Azure vm extension to enable HTTPS WinRM listener
+- name: Create Azure vm extension to enable HTTPS WinRM listener in Windows VM
   azure_rm_virtualmachine_extension:
     name: winrm-extension
     resource_group: "{{ resourcegroup.name }}"
@@ -107,8 +115,10 @@
   with_items:
     - "{{ vm }}"
 
-- name: Wait 300 seconds for elasticsearch to start in 9200 port
+- name: Check for 3389 Port to be up for Windows VM
   wait_for:
-    port: 9200
-    host: "{{ output_ip_address.state.ip_address }}"
-    delay: 60
+    port: 3389
+    host: "{{ item.state.ip_address }}"
+    delay: 15
+  when: item.item.os_type == "Windows"
+  with_items: "{{ output_ip_address.results }}"

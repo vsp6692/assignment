@@ -1,16 +1,17 @@
 # Excercise 1
 
-Need to create 2 machines which is reachable between each other and write a script get CPU, Disk and Network Usage.
+Need to create a Linux machines to run elasticsearch as docker container and check its health.
 
 ## High Level Approach
 
-1. Create two machines in Azure Subsription using Ansible Playbook.
+1. Creating a machines in Azure Subsription using Ansible Playbook and run docker container inside it.
 
 2. Created python script to get metrics of VM's using their respective API's. Authetication to API's are done using AD service principals.
 
 ## Tech Stacks
 
 * Azure AD
+* Docker
 * Ansible
 * Python
 
@@ -18,17 +19,17 @@ Need to create 2 machines which is reachable between each other and write a scri
 
 There are some prerequisites which need to be setup before we start executing the script.
 
-## Azure Subscription
+### Azure Subscription
 
-Create a free azure subscription with your details filled by using the link[https://azure.microsoft.com/en-in/account/].
+Create a free azure subscription with your details filled by using the [link](https://azure.microsoft.com/en-in/account/).
 
 ### Create App Registration in Azure AD 
 
-The intention of this step is to give access to Ansible to create resources in Azure Subscriptions. Follow this link[https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal] for app registrations.
+The intention of this step is to give access to Ansible to create resources in Azure Subscriptions. Follow this [link](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal) for app registrations.
 
 ### Setting up Machine
 
-We need Ansible and Python in our local machine to start our work. Create a linux based VM in your azure subscription. For our scenario we can use Ubuntu-16.04 with basic configuration is enough to run the below setup. Follow this link[https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal] to create VM.
+We need Ansible and Python in our local machine to start our work. Create a linux based VM in your azure subscription. For our scenario we can use Ubuntu-16.04 with basic configuration is enough to run the below setup. Follow this [link](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal) to create VM.
 
 Once VM is up login into machine to install required packages. Follow below steps to setup the machine.
 
@@ -71,4 +72,23 @@ ansible-playbook vmcreation.yml
 python get_metrics.py
 ```
 
+## Folder Structure
 
+Below is the structure of the excercise directory.
+
+```
+excercise2
+├── README.md                   ---> Documentation.
+├── elasticsearchhealth.py      ---> Python script to check health of elasticsearch.
+├── env.sh                      ---> File with authentication varibles.
+├── group_vars
+│   └── all.yaml                ---> Default variables for VM Creation.
+├── publicip.txt
+├── roles
+│   └── azure_vm
+│       ├── files
+│       │   └── cloud-init.yml  ---> Cloud init file which will be called after VM creation to start docker container.
+│       └── tasks
+│           └── main.yaml       ---> Playbook for having all tasks to create VM.
+└── vmcreation.yaml             ---> Startup playbook.
+```

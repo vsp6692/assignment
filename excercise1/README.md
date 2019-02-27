@@ -20,15 +20,15 @@ There are some prerequisites which need to be setup before we start executing th
 
 ### Azure Subscription
 
-Create a free azure subscription with your details filled by using the link[https://azure.microsoft.com/en-in/account/].
+Create a free azure subscription with your details filled by using the [link](https://azure.microsoft.com/en-in/account/).
 
 ### Create App Registration in Azure AD 
 
-The intention of this step is to give access to Ansible to create resources in Azure Subscriptions. Follow this link[https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal] for app registrations.
+The intention of this step is to give access to Ansible to create resources in Azure Subscriptions. Follow this [link](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal) for app registrations.
 
 ### Setting up Machine
 
-We need Ansible and Python in our local machine to start our work. Create a linux based VM in your azure subscription. For our scenario we can use Ubuntu-16.04 with basic configuration is enough to run the below setup. Follow this link[https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal] to create VM.
+We need Ansible and Python in our local machine to start our work. Create a linux based VM in your azure subscription. For our scenario we can use Ubuntu-16.04 with basic configuration is enough to run the below setup. Follow this [link](https://docs.microsoft.com/en-us/azure/virtual-machines/linux/quick-create-portal) to create VM.
 
 Once VM is up login into machine to install required packages. Follow below steps to setup the machine.
 
@@ -45,10 +45,10 @@ $ git clone https://github.com/vsp6692/assignment.git
 After cloning the repo replace the env.sh file with suitable variables.
 
 ```
-  export AZURE_CLIENT_ID="Application ID from App registrations"
-  export AZURE_SECRET="App registration secret"
-  export AZURE_SUBSCRIPTION_ID="Your Azure Subscription ID"
-  export AZURE_TENANT="Your current Azure Tenant ID"
+export AZURE_CLIENT_ID="Application ID from App registrations"
+export AZURE_SECRET="App registration secret"
+export AZURE_SUBSCRIPTION_ID="Your Azure Subscription ID"
+export AZURE_TENANT="Your current Azure Tenant ID"
 ```
 
 ## Steps to Complete Excercise
@@ -71,4 +71,20 @@ ansible-playbook vmcreation.yml
 python get_metrics.py
 ```
 
+## Folder Structure
 
+Below is the structure of the excercise directory.
+
+```
+excercise1
+├── README.md             ---> Documentation.
+├── env.sh                ---> File with authentication varibles.
+├── get_metrics.py        ---> Python script to get metrics.
+├── group_vars          
+│   └── all.yaml          ---> Default variables for VM Creation.
+├── roles
+│   └── azure_vm
+│       └── tasks
+│           └── main.yaml ---> Playbook for having all tasks to create VM's.
+└── vmcreation.yaml       ---> Startup playbook.
+```
